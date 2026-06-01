@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>IHP Clinic Map</title>
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+      integrity="sha256-p4NxAoJBhIINfQ3Btohsuokj6j6f3f5A4Gh4G92ZB3c="
+      crossorigin=""
+    />
+    <link rel="stylesheet" href="assets/styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <aside class="panel" aria-label="Map filters">
+        <header class="panel-header">
+          <div>
+            <h1>IHP Clinic Map</h1>
+            <p id="resultSummary">Loading clinics...</p>
+          </div>
+          <button class="icon-button" id="locateButton" type="button" title="Use my location" aria-label="Use my location">
+            <span aria-hidden="true">⌖</span>
+          </button>
+        </header>
+
+        <label class="search-box">
+          <span>Search</span>
+          <input id="searchInput" type="search" autocomplete="off" placeholder="Clinic, area, address, specialty" />
+        </label>
+
+        <section class="intro" aria-label="Map information">
+          <p>
+            Filter GP, Specialist, and TCM clinics by category and Google rating. Select a marker to view clinic details
+            and open the matched place in Google Maps.
+          </p>
+          <p>Clinic panel data as of October 2025. Google ratings as of May 2026.</p>
+        </section>
+
+        <section class="filter-section" aria-labelledby="categoryTitle">
+          <div class="section-row">
+            <h2 id="categoryTitle">Category</h2>
+            <button class="text-button" id="toggleCategories" type="button">All</button>
+          </div>
+          <div class="check-grid" id="categoryFilters"></div>
+        </section>
+
+        <section class="filter-section" aria-labelledby="ratingTitle">
+          <div class="section-row">
+            <h2 id="ratingTitle">Rating</h2>
+            <button class="text-button" id="toggleRatings" type="button">All</button>
+          </div>
+          <div class="check-grid" id="ratingFilters"></div>
+        </section>
+
+        <button class="reset-button" id="resetButton" type="button">Reset filters</button>
+      </aside>
+
+      <section class="map-wrap" aria-label="Clinic map">
+        <div id="map"></div>
+      </section>
+    </main>
+
+    <script
+      src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+      integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+      crossorigin=""
+    ></script>
+    <script src="assets/app.js"></script>
+  </body>
+</html>
