@@ -1,10 +1,12 @@
+const defaultCategories = ["GP"];
+const defaultRatings = ["4.5+"];
+
 const state = {
   clinics: [],
   filtered: [],
   markers: new Map(),
-  activeCategories: new Set(["GP", "Specialist", "TCM"]),
-  activeRatings: new Set(["4.5+", "4.0-4.4", "<4.0 / no rating"]),
-  activePriorities: new Set(["low", "medium", "high"]),
+  activeCategories: new Set(defaultCategories),
+  activeRatings: new Set(defaultRatings),
   query: "",
 };
 
@@ -26,12 +28,6 @@ const ratingLabels = [
   ["<4.0 / no rating", "<4.0 / no rating"],
 ];
 
-const priorityLabels = [
-  ["low", "Low"],
-  ["medium", "Medium"],
-  ["high", "High"],
-];
-
 const map = L.map("map", {
   zoomControl: false,
   preferCanvas: true,
@@ -45,6 +41,7 @@ L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
 }).addTo(map);
 
 const markerLayer = L.layerGroup().addTo(map);
+const userLocationLayer = L.layerGroup().addTo(map);
 
 const elements = {
   searchInput: document.querySelector("#searchInput"),
@@ -187,6 +184,7 @@ function applyFilters() {
   renderMarkers();
   updateSummary();
   refreshMapLayout();
+  fitSearchResults();
 }
 
 function renderMarkers() {
@@ -210,14 +208,14 @@ function updateSummary() {
 }
 
 function resetFilters() {
-  state.activeCategories = new Set(["GP", "Specialist", "TCM"]);
-  state.activeRatings = new Set(["4.5+", "4.0-4.4", "<4.0 / no rating"]);
-  state.activePriorities = new Set(["low", "medium", "high"]);
+  state.activeCategories = new Set(defaultCategories);
+  state.activeRatings = new Set(defaultRatings);
   elements.searchInput.value = "";
   elements.categoryFilters.replaceChildren();
   elements.ratingFilters.replaceChildren();
   setupFilters();
   applyFilters();
+  map.setView([1.3521, 103.8198], 11);
 }
 
 function toggleSet(set, values, container, labels, options) {
@@ -240,6 +238,26 @@ async function loadClinics() {
   });
 }
 
+function fitSearchResults() {
+  if (!state.query.trim() || state.filtered.length === 0) return;
+
+  window.setTimeout(() => {
+    if (state.filtered.length === 1) {
+      const [clinic] = state.filtered;
+      map.setView([clinic.lat, clinic.lng], 16);
+      return;
+    }
+
+    const bounds = L.latLngBounds(state.filtered.map((clinic) => [clinic.lat, clinic.lng]));
+    map.fitBounds(bounds, {
+      animate: true,
+      maxZoom: 15,
+      paddingTopLeft: [24, 24],
+      paddingBottomRight: [24, 24],
+    });
+  }, 80);
+}
+
 elements.searchInput.addEventListener("input", applyFilters);
 elements.resetButton.addEventListener("click", resetFilters);
 elements.toggleCategories.addEventListener("click", () =>
@@ -251,7 +269,31 @@ elements.toggleRatings.addEventListener("click", () =>
   toggleSet(state.activeRatings, ratingLabels.map(([value]) => value), elements.ratingFilters, ratingLabels),
 );
 elements.locateButton.addEventListener("click", () => {
-  map.locate({ setView: true, maxZoom: 15 });
+  map.locate({ enableHighAccuracy: true, maxZoom: 16, timeout: 10000 });
+});
+map.on("locationfound", (event) => {
+  userLocationLayer.clearLayers();
+  L.circle(event.latlng, {
+    radius: event.accuracy,
+    color: "#0f766e",
+    weight: 1,
+    fillColor: "#0f766e",
+    fillOpacity: 0.08,
+  }).addTo(userLocationLayer);
+  L.circleMarker(event.latlng, {
+    radius: 7,
+    color: "#ffffff",
+    weight: 3,
+    fillColor: "#0f766e",
+    fillOpacity: 1,
+  })
+    .bindPopup("Your current location")
+    .addTo(userLocationLayer)
+    .openPopup();
+  map.setView(event.latlng, Math.max(map.getZoom(), 15));
+});
+map.on("locationerror", () => {
+  elements.resultSummary.textContent = "Location access was unavailable. Check browser permissions.";
 });
 window.addEventListener("resize", refreshMapLayout);
 window.addEventListener("orientationchange", () => window.setTimeout(refreshMapLayout, 250));
