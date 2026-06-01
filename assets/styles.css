@@ -8,8 +8,15 @@
   --accent: #176b87;
   --focus: #0f766e;
   --gp: #1d71b8;
+  --gp-mid: #5b9fd0;
+  --gp-soft: #8dbfe1;
   --specialist: #b83a4b;
+  --specialist-mid: #cf6f7d;
+  --specialist-soft: #dd9aa4;
   --tcm: #2f855a;
+  --tcm-mid: #65a57f;
+  --tcm-soft: #93c6a8;
+  --rating-high: #d5a21a;
   --shadow: 0 10px 30px rgba(28, 39, 48, 0.14);
 }
 
@@ -140,6 +147,10 @@ h2 {
   color: #43535f;
   font-size: 13px;
   line-height: 1.45;
+}
+
+.intro p + p {
+  margin-top: 7px;
 }
 
 .filter-section {
@@ -383,7 +394,42 @@ h2 {
   color: #2d3d48;
   font-size: 12px;
   font-weight: 750;
+  border: 1px solid transparent;
   padding: 4px 8px;
+}
+
+.category-pill {
+  color: #fff;
+}
+
+.category-gp {
+  background: var(--gp);
+}
+
+.category-specialist {
+  background: var(--specialist);
+}
+
+.category-tcm {
+  background: var(--tcm);
+}
+
+.rating-pill {
+  background: #fff;
+  color: #283641;
+}
+
+.rating-high {
+  border-color: var(--rating-high);
+}
+
+.rating-mid {
+  border-color: rgba(22, 31, 39, 0.18);
+}
+
+.rating-low {
+  border-color: rgba(22, 31, 39, 0.12);
+  color: #52616d;
 }
 
 .maps-link {
@@ -403,16 +449,43 @@ h2 {
   width: 28px;
   height: 28px;
   place-items: center;
-  border: 2px solid #fff;
+  border: 2px solid rgba(255, 255, 255, 0.92);
   border-radius: 999px;
-  box-shadow: 0 2px 9px rgba(0, 0, 0, 0.28);
   color: #fff;
   font-size: 12px;
   font-weight: 900;
 }
 
-.priority-high {
-  outline: 3px solid rgba(241, 196, 15, 0.85);
+.marker-pin.rating-high {
+  border-color: var(--rating-high);
+}
+
+.marker-pin.category-gp.rating-mid {
+  background: var(--gp-mid);
+}
+
+.marker-pin.category-gp.rating-low {
+  background: var(--gp-soft);
+}
+
+.marker-pin.category-specialist.rating-mid {
+  background: var(--specialist-mid);
+}
+
+.marker-pin.category-specialist.rating-low {
+  background: var(--specialist-soft);
+}
+
+.marker-pin.category-tcm.rating-mid {
+  background: var(--tcm-mid);
+}
+
+.marker-pin.category-tcm.rating-low {
+  background: var(--tcm-soft);
+}
+
+.marker-pin.rating-low {
+  color: #fff;
 }
 
 @media (max-width: 820px) {

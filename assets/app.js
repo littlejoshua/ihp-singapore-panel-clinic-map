@@ -16,6 +16,18 @@ const colors = {
   TCM: "#2f855a",
 };
 
+const categoryClass = {
+  GP: "category-gp",
+  Specialist: "category-specialist",
+  TCM: "category-tcm",
+};
+
+const ratingClass = {
+  "4.5+": "rating-high",
+  "4.0-4.4": "rating-mid",
+  "<4.0 / no rating": "rating-low",
+};
+
 const categoryLabels = [
   ["GP", "GP"],
   ["Specialist", "Specialist"],
@@ -82,10 +94,11 @@ function ratingText(clinic) {
 
 function createMarkerIcon(clinic) {
   const label = clinic.category === "Specialist" ? "S" : clinic.category === "TCM" ? "T" : "G";
-  const priorityClass = clinic.reviewPriority === "high" ? " priority-high" : "";
+  const category = categoryClass[clinic.category] || "category-gp";
+  const rating = ratingClass[clinic.ratingBand] || "rating-low";
   return L.divIcon({
     className: "",
-    html: `<div class="marker-pin${priorityClass}" style="background:${colors[clinic.category] || "#176b87"}">${label}</div>`,
+    html: `<div class="marker-pin ${category} ${rating}">${label}</div>`,
     iconSize: [28, 28],
     iconAnchor: [14, 14],
     popupAnchor: [0, -14],
@@ -95,12 +108,14 @@ function createMarkerIcon(clinic) {
 function popupHtml(clinic) {
   const specialty = clinic.specialty ? `<div class="popup-row">${escapeHtml(clinic.specialty)}</div>` : "";
   const phone = clinic.phone ? `<div class="popup-row">Phone: ${escapeHtml(clinic.phone)}</div>` : "";
+  const category = categoryClass[clinic.category] || "category-gp";
+  const rating = ratingClass[clinic.ratingBand] || "rating-low";
   return `
     <div class="popup">
       <h3>${escapeHtml(clinic.name)}</h3>
       <div class="popup-meta">
-        <span class="pill">${escapeHtml(clinic.category)}</span>
-        <span class="pill">${escapeHtml(clinic.ratingBand)}</span>
+        <span class="pill category-pill ${category}">${escapeHtml(clinic.category)}</span>
+        <span class="pill rating-pill ${rating}">${escapeHtml(clinic.ratingBand)}</span>
         <span class="pill">${escapeHtml(ratingText(clinic))}</span>
       </div>
       ${specialty}
