@@ -1,0 +1,10 @@
+﻿layer_file,category,rating_band,record_count,high_priority_count,needs_review_count
+01_GP_4.5_plus.csv,GP,4.5+,221,6,7
+02_GP_4.0_to_4.4.csv,GP,4.0-4.4,186,2,2
+03_GP_below_4_or_no_rating.csv,GP,<4.0 / no rating,383,7,7
+04_Specialist_4.5_plus.csv,Specialist,4.5+,401,15,15
+05_Specialist_4.0_to_4.4.csv,Specialist,4.0-4.4,78,4,4
+06_Specialist_below_4_or_no_rating.csv,Specialist,<4.0 / no rating,85,4,4
+07_TCM_4.5_plus.csv,TCM,4.5+,50,1,1
+08_TCM_4.0_to_4.4.csv,TCM,4.0-4.4,10,0,0
+09_TCM_below_4_or_no_rating.csv,TCM,<4.0 / no rating,6,0,0
